@@ -9,7 +9,7 @@ class Block {
   }
 
   get hash() {
-    return objectHash({ data: this.data, hash: this.previousHash }, { encoding: 'hex'});
+    return createHash(this.data, this.previousHash);
   };
 
   async createSign() {
@@ -18,6 +18,8 @@ class Block {
     this.ts = resp.timeStampToken.ts;
   } 
 };
+
+const createHash = (data, previousHash) => objectHash({ data: data, hash: previousHash }, { encoding: 'hex'})
 
 const createBlockChainFromData = async (dataList) => {
   let blockChain = [];
@@ -32,19 +34,23 @@ const createBlockChainFromData = async (dataList) => {
   return blockChain;
 };
 
-const validateBlockChain = (blockChain) => {
-  previousBlock = null;
-  for(let i = 0; i <  blockChain.length; i++) {
-    if (!previousBlock || previousBlock.previousHash === blockChain[i].hash) {
-      previousBlock = blockChain[i];
-      continue;
+const verify = (blockChain) => {
+  console.log('blockchain',blockChain[0]);
+  previousBlockHash = createHash(blockChain[0].data, blockChain[0].previousHash);
+  for(let i = 1; i < blockChain.length; i++) {
+    const block = blockChain[i];
+    console.log('block', block);
+    if (previousBlockHash !== block.previousHash) {
+      console.log(previousBlockHash, block);
+      return false;
     }
-    return false;
+    previousBlockHash = createHash(block.data, block.previousHash);
   }
   return true;
 };
 
 module.exports = {
   createBlockChainFromData,
+  verify,
 };
 

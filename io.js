@@ -10,19 +10,21 @@ const save = (data, name) => {
   }); 
 }
 
-const read = (name) => {
-  let result;
-  fs.readFile(`${PATH}/${name}.json`, 'utf8' , (err, data) => {
+const read = async (name) => {
+  return JSON.parse(fs.readFileSync(`${PATH}/${name}.json`, 'utf8' , (err, data) => {
     if (err) {
       console.error(err);
       return;
     }
-    result = JSON.parse(data);
-  })
-  return result;
+  }));
 }
+
+const getBlockchains = () =>
+  fs.readdirSync(PATH, { withFileTypes: true })
+    .map(dirent => dirent.name.split('.')[0])
 
 module.exports = {
   save,
   read,
+  getBlockchains,
 };
