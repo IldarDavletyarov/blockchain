@@ -3,7 +3,7 @@ const fs = require('fs');
 const PATH = __dirname + '/data';
 
 const save = (data, name) => {
-  fs.writeFileSync(`${PATH}/${name}.json`, JSON.stringify(data), { flag: 'w'}, function(err) {
+  fs.writeFileSync(`${PATH}/${name}.bc`, JSON.stringify(data), { flag: 'w'}, function(err) {
     if(err) {
         return console.error(err);
     }
@@ -11,7 +11,7 @@ const save = (data, name) => {
 }
 
 const read = async (name) => {
-  return JSON.parse(fs.readFileSync(`${PATH}/${name}.json`, 'utf8' , (err, data) => {
+  return JSON.parse(fs.readFileSync(`${PATH}/${name}.bc`, 'utf8' , (err, data) => {
     if (err) {
       console.error(err);
       return;

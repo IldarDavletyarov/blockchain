@@ -9,8 +9,15 @@ const choicesObjectMenu = {
 };
 
 const choicesObjectReadMenu = {
-  'Verify': block.verify,
+  'Verify': verify,
 };
+
+
+function verify(blockChain) {
+  block.verify(blockChain) 
+  ? console.log('\x1b[32m', 'Successful verification!\n')
+  : console.log('\x1b[31m', 'Failed verification!\n');
+}
 
 
 async function createBlockChainFromLine() {
@@ -32,7 +39,7 @@ async function createBlockChainFromLine() {
 
     io.save(blockchain, answers.name);
 
-    console.log('Success!\n');
+    console.log('Success created!\n');
     start();
   });
 };
@@ -40,7 +47,7 @@ async function createBlockChainFromLine() {
 async function readBlockChains() {
   inquirer.prompt([
     {
-      type: 'rawlist',
+      type: 'list',
       name: 'block',
       message: 'List of blockchains',
       choices: io.getBlockchains(),
@@ -57,8 +64,7 @@ async function readBlockChains() {
         choices: Object.keys(choicesObjectReadMenu)
       },
     ]).then(async answers => {
-      const t = choicesObjectReadMenu[answers.menu](block);
-      console.log(t);
+      choicesObjectReadMenu[answers.menu](block);
       start();
     })
   });

@@ -9,7 +9,9 @@
     "axios": "^0.23.0",
     "charm": "^1.0.2",
     "core-js": "^3.6.5",
+    "crypto-js": "^4.1.1",
     "inquirer": "^8.2.0",
+    "jsrsasign": "^10.4.1",
     "object-hash": "^2.2.0",
     "prompt-choices": "^5.0.0"
   }
