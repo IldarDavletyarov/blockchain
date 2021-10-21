@@ -2,21 +2,24 @@ const fs = require('fs');
 
 const PATH = __dirname + '/data';
 
-const save = (data, name) => {
-  fs.writeFileSync(`${PATH}/${name}.bc`, JSON.stringify(data), { flag: 'w'}, function(err) {
-    if(err) {
-        return console.error(err);
-    }
-  }); 
+const getPath = (name) =>`${PATH}/${name}.bc`;
+
+const callBack = (err) => {
+  if(err) {
+    return console.error(err);
+  }
 }
 
+const save = (data, name) => {
+  fs.writeFileSync(getPath(name), JSON.stringify(data), { flag: 'w'}, callBack); 
+}
+
+const deleteBlock = (name) => {
+  fs.unlink(getPath(name), callBack)
+} 
+
 const read = async (name) => {
-  return JSON.parse(fs.readFileSync(`${PATH}/${name}.bc`, 'utf8' , (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-  }));
+  return JSON.parse(fs.readFileSync(getPath(name), 'utf8' , callBack));
 }
 
 const getBlockchains = () =>
@@ -27,4 +30,5 @@ module.exports = {
   save,
   read,
   getBlockchains,
+  deleteBlock
 };

@@ -9,14 +9,18 @@ const choicesObjectMenu = {
 };
 
 const choicesObjectReadMenu = {
-  'Verify': verify,
+  '✅ Verify': verify,
+  '❌ Delete': deleteBlock,
 };
 
 
 function verify(blockChain) {
-  block.verify(blockChain) 
-  ? console.log('\x1b[32m', 'Successful verification!\n')
-  : console.log('\x1b[31m', 'Failed verification!\n');
+  const result = block.verify(blockChain);
+  console.log(result.color, result.message);
+}
+
+function deleteBlock(blockChain, name) {
+  io.deleteBlock(name);
 }
 
 
@@ -25,11 +29,11 @@ async function createBlockChainFromLine() {
   .prompt([
     {
       name: 'name',
-      message: 'Write name of blockchain',
+      message: 'Write name of blockchain: ',
     },
     {
       name: 'data',
-      message: 'Write data via comma\n',
+      message: 'Write data via comma: ',
     },
   ])
   .then(async answers => {
@@ -49,7 +53,7 @@ async function readBlockChains() {
     {
       type: 'list',
       name: 'block',
-      message: 'List of blockchains',
+      message: 'List of blockchains:',
       choices: io.getBlockchains(),
     },
   ])
@@ -60,11 +64,11 @@ async function readBlockChains() {
       {
         type: 'list',
         name: 'menu',
-        message: `What you want with ${answers.block}`,
+        message: `Menu for ${answers.block}:`,
         choices: Object.keys(choicesObjectReadMenu)
       },
-    ]).then(async answers => {
-      choicesObjectReadMenu[answers.menu](block);
+    ]).then(async answersByAction => {
+      choicesObjectReadMenu[answersByAction.menu](block, answers.block);
       start();
     })
   });
